@@ -91,6 +91,7 @@ function App() {
 
   return (
     <div>
+      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 15px' }}></div>
       <h1>Random DnD Trap Generator</h1>
       <LevelInputForm onGenerate={handleGenerate} />
       {trap && <Trap trap={trap} />}
