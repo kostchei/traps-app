@@ -1,20 +1,12 @@
-// App.js
 import React, { useState } from 'react';
 import './App.css';
-
-
-// Available trap types.
-
-
 // Generates a random trap type.
 function randomTrapType() {
   const index = Math.floor(Math.random() * TRAP_TYPES.length);
   return TRAP_TYPES[index];
 }
-
 // Available trap types.
 const TRAP_TYPES = ['Setback', 'Dangerous', 'Deadly'];
-
 // Trap details for different levels and types.
 const TRAP_DETAILS = {
   '1-4': {
@@ -35,13 +27,9 @@ const TRAP_DETAILS = {
   '17-20': {
     'Setback': { dc: 11, toHit: 5, damage: '10d10', xp: 1800, description: '(filling pit, filling room with water or sand, crushing, gas)', effects: 'Chance of drowning/suffocation' },
     'Dangerous': { dc: 12, toHit: 8, damage: '18d10', xp: 8400, description: '(magic, fire, acid)', effects: 'Chance of soul destruction, petrification or complete disintegration' },
-    'Deadly': { dc: 20, toHit: 12, damage: '24d10', xp: 10000, description: '(magic, fire, acid)', effects: 'Chance of soul destruction, petrification or complete disintegration' }
+    'Deadly': { dc: 20, toHit: 12, damage: '24d10', xp: 33000, description: '(magic, fire, acid)', effects: 'Chance of soul destruction, petrification or complete disintegration' }
   }
 };
-
-
-
-
 // Get level range.
 function getLevelRange(level) {
   if (level <= 4) {
@@ -55,6 +43,7 @@ function getLevelRange(level) {
   }
 }
 
+
 // Trap generation function.
 function generateTrap(level) {
   let type = randomTrapType();
@@ -62,12 +51,10 @@ function generateTrap(level) {
 
   let details = TRAP_DETAILS[levelRange][type];
 
-  let { dc, toHit, damage, xp } = details;
+  let { dc, toHit, damage, xp, description, effects } = details;
 
-  return { type, dc, toHit, damage, xp };
+  return { type, dc, toHit, damage, xp, description, effects };
 }
-
-
 // Trap component. This displays the generated trap to the user.
 function Trap({ trap }) {
   return (
@@ -83,7 +70,6 @@ function Trap({ trap }) {
     </div>
   );
 }
-
 // Level Input Form component. This takes user input for the level and calls the onGenerate function prop when the form is submitted.
 function LevelInputForm({ onGenerate }) {
   const [level, setLevel] = useState(1);
@@ -92,7 +78,6 @@ function LevelInputForm({ onGenerate }) {
     event.preventDefault();
     onGenerate(level);
   };
-
   return (
     <form onSubmit={handleSubmit}>
       <label>
@@ -103,13 +88,19 @@ function LevelInputForm({ onGenerate }) {
     </form>
   );
 }
+// Generates a random integer in a range.
+function randomIntInRange(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 // Main App component. This renders the Level Input Form and the Trap components, and handles trap generation when the form is submitted.
 function App() {
   const [trap, setTrap] = useState(null);
 
   const handleGenerate = (level) => {
-    const newTrap = generateTrap(level);
+    // Adjust the level by a random amount between -3 and 3, but ensure it's at least 1.
+    const adjustedLevel = Math.max(1, level + randomIntInRange(-3, 3));
+    const newTrap = generateTrap(adjustedLevel);
     setTrap(newTrap);
   };
 
@@ -123,4 +114,3 @@ function App() {
 }
 
 export default App;
-
